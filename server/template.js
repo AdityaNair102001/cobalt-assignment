@@ -8,9 +8,6 @@ var oAuth = docusign.ApiClient.OAuth;
 var basePath = restApi.BasePath.DEMO;
 var oAuthBasePath = oAuth.BasePath.DEMO;
 
-const IntegratorKeyAuthCode = process.env.IK;
-const ClientSecret = process.env.SECRET;
-
 const apiClient = new docusign.ApiClient({
   basePath: basePath,
   oAuthBasePath: oAuthBasePath,

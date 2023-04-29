@@ -1,10 +1,3 @@
-const docusign = require("docusign-esign");
-var restApi = docusign.ApiClient.RestApi;
-var oAuth = docusign.ApiClient.OAuth;
-
-var basePath = restApi.BasePath.DEMO;
-var oAuthBasePath = oAuth.BasePath.DEMO;
-
 const integratorKeyAuthCode = process.env.IK;
 const clientSecret = process.env.SECRET;
 

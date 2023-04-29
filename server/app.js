@@ -35,6 +35,7 @@ app.use("/auth", authRouter);
 
 app.use(verificationMiddleware);
 
+//private routes
 app.use("/template", templateRouter);
 app.use("/envelope", envelopeRouter);
 app.listen(port, () => {

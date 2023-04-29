@@ -1,9 +1,9 @@
 import "./App.css";
 
 import { Routes, Route } from "react-router-dom";
-import LandingPage from "./LandingPage";
-import Dashboard from "./Dashboard";
-import Login from "./Login";
+import LandingPage from "./pages/LandingPage";
+import Dashboard from "./pages/Dashboard";
+import Login from "./pages/Login";
 
 function App() {
   return (

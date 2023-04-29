@@ -1,28 +1,7 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-async function getTokens(code, navigate, setLoading) {
-  try {
-    setLoading(true);
-    const response = await axios.post("http://localhost:3001/auth", code, {
-      withCredentials: true,
-    });
-    if (response.data.success === true) {
-      navigate("/dashboard", {
-        state: {
-          name: response.data.name,
-          email: response.data.email,
-        },
-      });
-    } else {
-      console.log(response);
-    }
-    setLoading(false);
-  } catch (error) {
-    setLoading(false);
-    console.log(error);
-  }
-}
+import { Spinner, Text } from "@chakra-ui/react";
+import getTokens from "../utils/getTokens";
 function Login() {
   const [searchParams] = useSearchParams();
   const code = Object.fromEntries([...searchParams]);
@@ -37,7 +16,25 @@ function Login() {
   return (
     <div>
       {loading ? (
-        "Logging in..."
+        <>
+          <Spinner
+            position={"fixed"}
+            left={"50%"}
+            top={"50%"}
+            mt={"1rem"}
+            visibility={loading ? "visible" : "hidden"}
+            size="lg"
+            color="blue"
+          ></Spinner>
+          <Text
+            position={"fixed"}
+            left={"51%"}
+            top={"50%"}
+            transform={"translate(-50%, -50%)"}
+          >
+            Logging in...
+          </Text>
+        </>
       ) : (
         <>
           Couldn't login. Try again after clearing cookies{" "}

@@ -8,9 +8,6 @@ var oAuth = docusign.ApiClient.OAuth;
 var basePath = restApi.BasePath.DEMO;
 var oAuthBasePath = oAuth.BasePath.DEMO;
 
-const IntegratorKeyAuthCode = process.env.IK;
-const ClientSecret = process.env.SECRET;
-
 const apiClient = new docusign.ApiClient({
   basePath: basePath,
   oAuthBasePath: oAuthBasePath,
@@ -30,13 +27,6 @@ function makeEnvelope(args) {
     roleName: "signer",
   });
 
-  // Create a cc template role.
-  // We're setting the parameters via setters
-  // let cc1 = new docusign.TemplateRole();
-  // cc1.email = args.ccEmail;
-  // cc1.name = args.ccName;
-  // cc1.roleName = 'cc';
-
   // Add the TemplateRole objects to the envelope object
   env.templateRoles = [signer1];
   env.status = "sent"; // We want the envelope to be sent
@@ -45,28 +35,40 @@ function makeEnvelope(args) {
 }
 
 router.post("/", async (req, res) => {
-  const accessToken = req.cookies.accessToken;
-  apiClient.addDefaultHeader("Authorization", `Bearer ${accessToken}`);
+  try {
+    const accessToken = req.cookies.accessToken;
+    const accoundId = req.session.accountId;
+    const { templateId, signerEmail, signerName } = req.body;
 
-  let envelopesApi = new docusign.EnvelopesApi(apiClient);
+    apiClient.addDefaultHeader("Authorization", `Bearer ${accessToken}`);
 
-  // Make the envelope request body
-  let envelope = makeEnvelope({
-    templateId: "a6f79b3b-b9e4-4370-bcea-d09ede668628",
-    signerEmail: "adityanair102001@gmail.com",
-    signerName: "Aditya Nair",
-  });
+    let envelopesApi = new docusign.EnvelopesApi(apiClient);
 
-  // Call Envelopes::create API method
-  // Exceptions will be caught by the calling function
-  let results = await envelopesApi.createEnvelope(
-    "6ea27e5d-de33-439a-93b1-8449441af9c7",
-    {
+    // Make the envelope request body
+    let envelope = makeEnvelope({
+      templateId: templateId,
+      signerEmail: signerEmail,
+      signerName: signerName,
+    });
+
+    // Call Envelopes::create API method
+    // Exceptions will be caught by the calling function
+
+    let results = await envelopesApi.createEnvelope(accoundId, {
       envelopeDefinition: envelope,
-    }
-  );
+    });
 
-  console.log(results);
-  res.json({ sent: true });
+    console.log(results);
+    if (results.status === "sent") {
+      res.json({
+        success: true,
+        status: results.status,
+        message: "Envelope has been sent!",
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ success: false, message: error.message });
+  }
 });
 module.exports = router;
