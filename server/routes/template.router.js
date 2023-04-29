@@ -25,9 +25,9 @@ router.get("/", async (req, res) => {
 
     // list templates
     const response = await templatesApi.listTemplates(req.session.accountId);
-    console.log(response);
+
     const templates = response.envelopeTemplates || [];
-    console.log(templates);
+
     const allTemplateDetails = templates.map((template) => {
       return {
         id: template.templateId,
