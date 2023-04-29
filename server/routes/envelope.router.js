@@ -19,8 +19,6 @@ function makeEnvelope(args) {
   let env = new docusign.EnvelopeDefinition();
   env.templateId = args.templateId;
 
-  // Create template role elements to connect the signer and cc recipients
-  // to the template
   // We're setting the parameters via the object creation
   let signer1 = docusign.TemplateRole.constructFromObject({
     email: args.signerEmail,
