@@ -19,7 +19,7 @@
   Please use the exact same variables and values. 
   
 - npm install
-- npm run
+- npm start
 
 ## Documentation:
 View the [documentation](https://mesquite-acapella-8e2.notion.site/Docusign-Integration-08e70b1bb9cd4dd2b5e6ede41def7b3b) 
