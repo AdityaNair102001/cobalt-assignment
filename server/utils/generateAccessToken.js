@@ -8,8 +8,7 @@ async function generateAccessToken(refreshToken) {
     const base64IKCK = Buffer.from(
       integratorKeyAuthCode + ":" + clientSecret
     ).toString("base64");
-    console.log("base?", base64IKCK);
-    console.log(refreshToken);
+
     const response = await axios.post(
       "https://account-d.docusign.com/oauth/token",
       {
@@ -22,7 +21,7 @@ async function generateAccessToken(refreshToken) {
         },
       }
     );
-    console.log(response.data);
+
     return {
       accessToken: response.data.access_token,
       refreshToken: response.data.refresh_token,

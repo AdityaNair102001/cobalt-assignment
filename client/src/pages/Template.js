@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 
 import Envelope from "./SendEnvelope";
-import { Box, Center, Spinner } from "@chakra-ui/react";
+import { Box, Center, Spinner, useToast } from "@chakra-ui/react";
 import getTemplates from "../utils/getTemplates";
+import { useNavigate } from "react-router-dom";
 
 function Template() {
+  const navigate = useNavigate();
+  const toast = useToast();
   useEffect(() => {
-    getTemplates(setTemplates);
+    getTemplates(setTemplates, navigate, toast);
   }, []);
 
   const [templates, setTemplates] = useState(null);
@@ -31,7 +34,7 @@ function Template() {
             </Box>
           ))
         ) : (
-          "You don't have any templates"
+          "You don't have any templates. Please upload one first."
         )
       ) : (
         <>

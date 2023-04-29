@@ -1,9 +1,9 @@
-const generateAccessToken = require("./generateAccessToken");
+const generateAccessToken = require("../utils/generateAccessToken");
 
 async function verificationMiddleware(req, res, next) {
   if (
-    !req.cookies.accessToken ||
-    req.session.accoundId ||
+    !req.cookies.accessToken &&
+    req.session.accountId &&
     req.session.refreshToken
   ) {
     // Renew access token
@@ -11,7 +11,6 @@ async function verificationMiddleware(req, res, next) {
 
     if (tokens?.accessToken && tokens?.refreshToken) {
       req.cookies.accessToken = tokens.accessToken;
-      console.log(tokens.expiresIn);
       res.cookie("accessToken", tokens.accessToken, {
         maxAge: tokens.expiresIn * 60 * 1000, //in ms
       });
@@ -22,9 +21,7 @@ async function verificationMiddleware(req, res, next) {
         .status(403)
         .json({ success: false, messsage: "Please login again" });
     }
-  } else if (!req.session.accoundId || !req.session.refreshToken) {
-    console.log(req.session.accoundId);
-    console.log("yaha?");
+  } else if (!req.session.accountId || !req.session.refreshToken) {
     return res
       .status(403)
       .json({ success: false, messsage: "Please login again" });

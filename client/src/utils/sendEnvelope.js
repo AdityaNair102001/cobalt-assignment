@@ -23,8 +23,6 @@ export default async function sendEnvelope(
       }
     );
     if (response.data.success === true) {
-      console.log(response.data.message);
-
       toast({
         title: "Envelope sent!",
         description: response.data.message,
@@ -37,7 +35,6 @@ export default async function sendEnvelope(
     setSignerName(null);
     setSignerEmail(null);
     setLoading(false);
-    console.log(response.data);
   } catch (error) {
     setLoading(false);
     console.log(error);

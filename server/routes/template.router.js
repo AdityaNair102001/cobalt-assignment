@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 require("dotenv").config();
 const docusign = require("docusign-esign");
+const verificationMiddleware = require("../middleware/verificationMiddleware");
 var restApi = docusign.ApiClient.RestApi;
 var oAuth = docusign.ApiClient.OAuth;
 
@@ -24,9 +25,9 @@ router.get("/", async (req, res) => {
 
     // list templates
     const response = await templatesApi.listTemplates(req.session.accountId);
-    console.log(response.envelopeTemplates);
-    const templates = response.envelopeTemplates;
-    console.log(`Found ${templates.length} templates:`);
+    console.log(response);
+    const templates = response.envelopeTemplates || [];
+    console.log(templates);
     const allTemplateDetails = templates.map((template) => {
       return {
         id: template.templateId,
@@ -34,7 +35,7 @@ router.get("/", async (req, res) => {
         ownerEmail: template.owner.userName,
       };
     });
-    console.log(allTemplateDetails);
+
     res.status(200).json({ success: true, templates: allTemplateDetails });
   } catch (error) {
     console.error(error);

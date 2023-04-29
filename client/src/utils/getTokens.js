@@ -17,6 +17,7 @@ export default async function getTokens(code, navigate, setLoading) {
     }
     setLoading(false);
   } catch (error) {
+    navigate("../");
     setLoading(false);
     console.log(error);
   }

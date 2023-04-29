@@ -1,18 +1,19 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const port = 3001;
 const bodyParser = require("body-parser");
 const sessions = require("express-session");
 const cors = require("cors");
-const authRouter = require("./auth");
-const templateRouter = require("./template");
-const envelopeRouter = require("./envelope");
+const authRouter = require("./routes/auth.router");
+const templateRouter = require("./routes/template.router");
+const envelopeRouter = require("./routes/envelope.router");
 var cookieParser = require("cookie-parser");
-const verificationMiddleware = require("./verificationMiddleware");
+const verificationMiddleware = require("./middleware/verificationMiddleware");
 app.use(cookieParser());
 app.use(
   sessions({
-    secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
+    secret: process.env.SESSION_SECRET,
     saveUninitialized: true,
     cookie: { maxAge: 1000 * 60 * 60 * 24 * 30, httpOnly: false },
     resave: false,

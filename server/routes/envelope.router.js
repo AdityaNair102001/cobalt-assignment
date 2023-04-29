@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 require("dotenv").config();
 const docusign = require("docusign-esign");
+
 var restApi = docusign.ApiClient.RestApi;
 var oAuth = docusign.ApiClient.OAuth;
 
@@ -37,7 +38,7 @@ function makeEnvelope(args) {
 router.post("/", async (req, res) => {
   try {
     const accessToken = req.cookies.accessToken;
-    const accoundId = req.session.accountId;
+    const accountId = req.session.accountId;
     const { templateId, signerEmail, signerName } = req.body;
 
     apiClient.addDefaultHeader("Authorization", `Bearer ${accessToken}`);
@@ -54,11 +55,10 @@ router.post("/", async (req, res) => {
     // Call Envelopes::create API method
     // Exceptions will be caught by the calling function
 
-    let results = await envelopesApi.createEnvelope(accoundId, {
+    let results = await envelopesApi.createEnvelope(accountId, {
       envelopeDefinition: envelope,
     });
 
-    console.log(results);
     if (results.status === "sent") {
       res.json({
         success: true,
