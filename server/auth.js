@@ -25,39 +25,34 @@ router.get("/", (req, res) => {
 
 router.post("/", async (req, res) => {
   const { code } = req.body;
+  try {
+    const oAuthToken = await apiClient.generateAccessToken(
+      integratorKeyAuthCode,
+      clientSecret,
+      code
+    );
+    console.log(oAuthToken);
 
-  apiClient
-    .generateAccessToken(integratorKeyAuthCode, clientSecret, code)
-    .then(function (oAuthToken) {
-      console.log(oAuthToken);
+    const userInfo = await apiClient.getUserInfo(oAuthToken.accessToken);
 
-      apiClient
-        .getUserInfo(oAuthToken.accessToken)
-        .then(function (userInfo) {
-          if (userInfo.accounts[0].accountId) {
-            req.session.accountId = userInfo.accounts[0].accountId;
-            req.session.refreshToken = oAuthToken.refreshToken;
+    if (userInfo.accounts[0].accountId) {
+      req.session.accountId = userInfo.accounts[0].accountId;
+      req.session.refreshToken = oAuthToken.refreshToken;
 
-            res.cookie("accessToken", oAuthToken.accessToken, {
-              maxAge: oAuthToken.expiresIn * 60 * 1000, //in ms
-            });
-            res.status(200).json({
-              success: true,
-              name: userInfo.name,
-              email: userInfo.email,
-              message: "all tokens set",
-            });
-          }
-        })
-        .catch(function (err) {
-          console.log(err);
-          res.json({ error: err.message });
-        });
-    })
-    .catch(function (err) {
-      console.log(err);
-      res.status(403).json({ error: err.message });
-    });
+      res.cookie("accessToken", oAuthToken.accessToken, {
+        maxAge: oAuthToken.expiresIn * 60 * 1000, //in ms
+      });
+      res.status(200).json({
+        success: true,
+        name: userInfo.name,
+        email: userInfo.email,
+        message: "all tokens set",
+      });
+    }
+  } catch (error) {
+    console.log(err);
+    res.status(403).json({ error: err.message });
+  }
 });
 
 router.get("/logout", (req, res) => {
