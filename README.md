@@ -9,13 +9,14 @@
 
 ## Server
 - cd server
-- make a .env file and copy the following:
+- make a .env file and paste the following:
 
   ```javascript 
   IK=d030c7a9-3553-4d37-922a-0fc747e7d1aa
   SECRET=ad6c768e-da70-4421-8ea7-ef74a9760f3f
   SESSION_SECRET=thisismysecrctekeyfhrgfgrfrty84fwir767
   ```
+  Please use the exact same variables and values. 
   
 - npm install
 - npm run
