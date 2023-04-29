@@ -31,8 +31,10 @@ app.use(cors(corsOptions));
 
 app.use(bodyParser.json());
 
-app.use("/", authRouter);
+app.use("/auth", authRouter);
+
 app.use(verificationMiddleware);
+
 app.use("/template", templateRouter);
 app.use("/envelope", envelopeRouter);
 app.listen(port, () => {

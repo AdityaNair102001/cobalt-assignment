@@ -8,24 +8,14 @@ var oAuthBasePath = oAuth.BasePath.DEMO;
 const integratorKeyAuthCode = process.env.IK;
 const clientSecret = process.env.SECRET;
 
-const apiClient = new docusign.ApiClient({
-  basePath: basePath,
-  oAuthBasePath: oAuthBasePath,
-});
-
 const axios = require("axios");
-
-// apiClient.addDefaultHeader(
-//   "Authorization",
-//   docusign.authHeader(integratorKeyAuthCode, clientSecret)
-// );
 
 async function generateAccessToken(refreshToken) {
   try {
     const base64IKCK = Buffer.from(
       integratorKeyAuthCode + ":" + clientSecret
     ).toString("base64");
-    console.log(base64IKCK);
+    console.log("base?", base64IKCK);
     console.log(refreshToken);
     const response = await axios.post(
       "https://account-d.docusign.com/oauth/token",

@@ -23,6 +23,8 @@ async function verificationMiddleware(req, res, next) {
         .json({ success: false, messsage: "Please login again" });
     }
   } else if (!req.session.accoundId || !req.session.refreshToken) {
+    console.log(req.session.accoundId);
+    console.log("yaha?");
     return res
       .status(403)
       .json({ success: false, messsage: "Please login again" });

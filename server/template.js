@@ -16,30 +16,32 @@ const apiClient = new docusign.ApiClient({
   oAuthBasePath: oAuthBasePath,
 });
 
-router.get("/", (req, res) => {
-  console.log(req.cookies);
-  const accessToken = req.cookies.accessToken;
-  console.log("accessToken from template", accessToken);
-  console.log(req.session.accountId);
-  apiClient.addDefaultHeader("Authorization", `Bearer ${accessToken}`);
+router.get("/", async (req, res) => {
+  try {
+    const accessToken = req.cookies.accessToken;
 
-  // create TemplatesApi object
-  const templatesApi = new docusign.TemplatesApi(apiClient);
+    apiClient.addDefaultHeader("Authorization", `Bearer ${accessToken}`);
 
-  // list templates
-  templatesApi
-    .listTemplates(req.session.accountId)
-    .then((response) => {
-      console.log(response.envelopeTemplates);
-      const templates = response.envelopeTemplates;
-      console.log(`Found ${templates.length} templates:`);
-      templates.forEach((template) => {
-        console.log(`${template.templateId} - ${template.name}`);
-      });
-      res.json({ tem: "plate" });
-    })
-    .catch((error) => {
-      console.error(error);
+    // create TemplatesApi object
+    const templatesApi = new docusign.TemplatesApi(apiClient);
+
+    // list templates
+    const response = await templatesApi.listTemplates(req.session.accountId);
+    console.log(response.envelopeTemplates);
+    const templates = response.envelopeTemplates;
+    console.log(`Found ${templates.length} templates:`);
+    const allTemplateDetails = templates.map((template) => {
+      return {
+        id: template.templateId,
+        name: template.name,
+        ownerEmail: template.owner.userName,
+      };
     });
+    console.log(allTemplateDetails);
+    res.status(200).json({ success: true, templates: allTemplateDetails });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ success: false, message: error.message });
+  }
 });
 module.exports = router;

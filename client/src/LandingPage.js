@@ -5,7 +5,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 async function getLoginLink(setLoginlink) {
   try {
-    const response = await axios.get("http://localhost:3001");
+    const response = await axios.get("http://localhost:3001/auth");
     setLoginlink(response.data.loginLink);
   } catch (error) {
     console.log(error);
