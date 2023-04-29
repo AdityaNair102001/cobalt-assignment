@@ -1,6 +1,6 @@
-## The application has 2 parts- react client and express server. 
+## The application has 2 parts: react client and express server. 
 
-#Steps to run:
+# Steps to run:
 
 ## Client
 - cd client
